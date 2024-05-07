@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "bitnami_keycloak",
+      "database": "bitnami_keycloak",
+      "username": "bn_keycloak",
+      "password": "password"
+    }
+  ]
+}

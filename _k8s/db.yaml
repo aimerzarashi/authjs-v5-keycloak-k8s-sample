@@ -1,0 +1,127 @@
+##################################################################################################
+# authjs-db
+##################################################################################################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authjs-db
+  labels:
+    app: authjs-db
+    service: authjs
+spec:
+  ports:
+    - port: 5432
+      name: tcp
+      appProtocol: tcp
+  selector:
+    app: authjs-db
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: authjs-db
+  labels:
+    account: authjs-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authjs-db
+  labels:
+    app: authjs-db
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authjs-db
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: authjs-db
+        version: v1
+    spec:
+      serviceAccountName: authjs-db
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: authjs-db
+          image: postgres:16.1
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 400m
+              memory: 400Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          tty: true
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: authjs-db
+            - configMapRef:
+                name: authjs-db
+          volumeMounts:
+            - name: authjs-db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: authjs-db-data
+          persistentVolumeClaim:
+            claimName: authjs-db-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: authjs-db-data
+  labels:
+    app: authjs-db
+spec:
+  storageClassName: authjs-db-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+##################################################################################################
+# authjs-db
+##################################################################################################
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: authjs-db-data
+  labels:
+    type: local
+spec:
+  storageClassName: authjs-db-data
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/db/data"
+##################################################################################################
+# authjs-db
+##################################################################################################
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authjs-db
+data:
+  POSTGRES_DB: bitnami_keycloak
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authjs-db
+type: Opaque
+data:
+  POSTGRES_USER: Ym5fa2V5Y2xvYWs= #bn_keycloak
+  POSTGRES_PASSWORD: cGFzc3dvcmQ= #password
