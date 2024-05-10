@@ -66,8 +66,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: authjs-idp
-            # - secretRef:
-            #     name: authjs-idp
+            - secretRef:
+                name: authjs-idp
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -80,9 +80,16 @@ data:
   KEYCLOAK_DATABASE_PORT: "5432"
   KC_HOSTNAME_URL: "https://authjs-idp.aimerzarashi.com"
   KC_HOSTNAME_ADMIN_URL: "https://authjs-idp.aimerzarashi.com"
-  KEYCLOAK_ADMIN_USER: user
-  KEYCLOAK_ADMIN_PASSWORD: bitnami
   KEYCLOAK_DATABASE_NAME: bitnami_keycloak
   KEYCLOAK_DATABASE_SCHEMA: public
-  KEYCLOAK_DATABASE_USER: bn_keycloak
-  KEYCLOAK_DATABASE_PASSWORD: password
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authjs-idp
+type: Opaque
+data:
+  KEYCLOAK_ADMIN_USER: dXNlcg== #user
+  KEYCLOAK_ADMIN_PASSWORD: Yml0bmFtaQ== #bitnami
+  KEYCLOAK_DATABASE_USER: Ym5fa2V5Y2xvYWs= #bn_keycloak
+  KEYCLOAK_DATABASE_PASSWORD: cGFzc3dvcmQ= #password

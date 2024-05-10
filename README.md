@@ -1,6 +1,7 @@
 ## install
 ``` 
-minikube start --memory='6g' --cpus=8 mount /data:/data
+minikube start --memory='6g' --cpus=8
+minikube mount $PWD:/data
  
 istioctl install --set profile=demo -y
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.21/samples/addons/kiali.yaml
@@ -17,14 +18,14 @@ istioctl dashboard kiali
  
 minikube tunnel
 
-kubectl create -n istio-system secret tls tls-credential-aimerzarashi.com --key=tls/aimerzarashi.com/privkey1.pem --cert=tls/aimerzarashi.com/fullchain1.pem 
+kubectl create -n istio-system secret tls tls-credential-aimerzarashi.com --key=services/tls/aimerzarashi.com/privkey1.pem --cert=services/tls/aimerzarashi.com/fullchain1.pem 
 
-kubectl apply -f _k8s/kube-system/dns.yaml
+kubectl apply -f kube-system/dns.yaml
 kubectl -n kube-system rollout restart deployment coredns
 
 kubectl create namespace services
 kubectl label namespace services istio-injection=enabled --overwrite
-kubectl apply -n=services -f _k8s/
+kubectl apply -n=services -f services
 ``` 
 
 ## uninstall

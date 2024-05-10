@@ -50,7 +50,7 @@ spec:
         fsGroup: 0
       containers:
         - name: authjs-db
-          image: postgres:16.1
+          image: bitnami/postgresql:16
           imagePullPolicy: IfNotPresent
           resources:
             limits:
@@ -69,7 +69,7 @@ spec:
                 name: authjs-db
           volumeMounts:
             - name: authjs-db-data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /bitnami/postgresql/data
       volumes:
         - name: authjs-db-data
           persistentVolumeClaim:
@@ -88,9 +88,6 @@ spec:
   resources:
     requests:
       storage: 500Mi
-##################################################################################################
-# authjs-db
-##################################################################################################
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -106,16 +103,13 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/data/db/data"
-##################################################################################################
-# authjs-db
-##################################################################################################
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: authjs-db
 data:
-  POSTGRES_DB: bitnami_keycloak
+  POSTGRESQL_DATABASE: bitnami_keycloak
 ---
 apiVersion: v1
 kind: Secret
@@ -123,5 +117,5 @@ metadata:
   name: authjs-db
 type: Opaque
 data:
-  POSTGRES_USER: Ym5fa2V5Y2xvYWs= #bn_keycloak
-  POSTGRES_PASSWORD: cGFzc3dvcmQ= #password
+  POSTGRESQL_USERNAME: Ym5fa2V5Y2xvYWs= #bn_keycloak
+  POSTGRESQL_PASSWORD: cGFzc3dvcmQ= #password
