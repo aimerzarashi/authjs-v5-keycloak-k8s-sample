@@ -68,6 +68,18 @@ spec:
                 name: authjs-idp
             - secretRef:
                 name: authjs-idp
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              while ! nc -z authjs-db 5432; do
+                sleep 5
+                echo "Waiting..."
+              done
 ---
 apiVersion: v1
 kind: ConfigMap
