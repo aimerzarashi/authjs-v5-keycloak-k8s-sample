@@ -1,11 +1,11 @@
-# ##################################################################################################
-# # Services
-# ##################################################################################################
-# ---
+##################################################################################################
+# services
+##################################################################################################
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: services
+  name: authjs
 spec:
   selector:
     istio: ingressgateway
@@ -27,9 +27,6 @@ spec:
         credentialName: tls-credential-aimerzarashi.com
       hosts:
         - "*"
-##################################################################################################
-# authjs-web
-##################################################################################################
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -46,9 +43,6 @@ spec:
             host: authjs-web
             port:
               number: 3000
-##################################################################################################
-# authjs-idp
-##################################################################################################
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -65,3 +59,25 @@ spec:
             host: authjs-idp
             port:
               number: 8080
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: authjs
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: authjs
+spec:
+  host: "*.services.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+    - name: v1
+      labels:
+        version: v1
