@@ -36,7 +36,7 @@ spec:
   hosts:
     - authjs-web.aimerzarashi.com
   gateways:
-    - services
+    - authjs
   http:
     - route:
         - destination:
@@ -52,7 +52,7 @@ spec:
   hosts:
     - authjs-idp.aimerzarashi.com
   gateways:
-    - services
+    - authjs
   http:
     - route:
         - destination:
