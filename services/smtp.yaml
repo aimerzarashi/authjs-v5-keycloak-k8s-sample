@@ -1,0 +1,68 @@
+##################################################################################################
+# authjs-smtp
+##################################################################################################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authjs-smtp
+  labels:
+    app: authjs-smtp
+    service: authjs
+spec:
+  ports:
+    - port: 8025
+      name: external
+      appProtocol: http
+    - port: 1025
+      name: internal
+      appProtocol: tcp
+  selector:
+    app: authjs-smtp
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: authjs-smtp
+  labels:
+    account: authjs-smtp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authjs-smtp
+  labels:
+    app: authjs-smtp
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authjs-smtp
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: authjs-smtp
+        version: v1
+    spec:
+      serviceAccountName: authjs-smtp
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: authjs-smtp
+          image: mailhog/mailhog:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          tty: true
+          ports:
+            - containerPort: 8025
+            - containerPort: 1025
