@@ -30,7 +30,7 @@ kubectl apply -n=services -f services
 
 ## uninstall
 ``` 
-kubectl delete -n=services -f _k8s/
+kubectl delete -n=services -f services
 kubectl delete namespace services
  
 kubectl delete -n istio-system secret tls-credential-aimerzarashi.com
