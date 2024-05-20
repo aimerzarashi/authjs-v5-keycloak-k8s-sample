@@ -77,3 +77,4 @@ data:
   AUTH_KEYCLOAK_ID: web
   AUTH_KEYCLOAK_SECRET: EVeEQMfIvv40XWEaxYCxf0DogbOkuDAW
   AUTH_KEYCLOAK_ISSUER: https://authjs-idp.aimerzarashi.com/realms/demo
+  QUERY_URL: "http://authjs-api:1323"
