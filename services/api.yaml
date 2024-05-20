@@ -1,0 +1,64 @@
+##################################################################################################
+# authjs-api
+##################################################################################################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authjs-api
+  labels:
+    app: authjs-api
+    service: authjs
+spec:
+  ports:
+    - port: 1323
+      name: tcp
+      appProtocol: http
+  selector:
+    app: authjs-api
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: authjs-api
+  labels:
+    account: authjs-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authjs-api
+  labels:
+    app: authjs-api
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authjs-api
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: authjs-api
+        version: v1
+    spec:
+      serviceAccountName: authjs-api
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: authjs-api
+          image: aimerzarashi/oqs-golang:0.0.1
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          tty: true
+          ports:
+            - containerPort: 1323
