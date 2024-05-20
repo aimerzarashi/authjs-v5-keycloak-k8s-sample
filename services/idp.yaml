@@ -51,7 +51,7 @@ spec:
         fsGroup: 0
       containers:
         - name: authjs-idp
-          image: bitnami/keycloak:23
+          image: bitnami/keycloak:24
           imagePullPolicy: IfNotPresent
           resources:
             limits:
