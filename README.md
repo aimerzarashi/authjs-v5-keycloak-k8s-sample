@@ -20,7 +20,7 @@ minikube tunnel
 
 kubectl create -n istio-system secret tls tls-credential-aimerzarashi.com --key=services/tls/aimerzarashi.com/privkey1.pem --cert=services/tls/aimerzarashi.com/fullchain1.pem 
 
-kubectl apply -f kube-system/dns.yaml
+kubectl get configmap coredns -n kube-system -o yaml | sed '/log/i \ \ \ \ rewrite name regex (.*)\\.aimerzarashi\\.com istio-ingressgateway.istio-system.svc.cluster.local' | kubectl apply -f -
 kubectl -n kube-system rollout restart deployment coredns
 
 kubectl create namespace services

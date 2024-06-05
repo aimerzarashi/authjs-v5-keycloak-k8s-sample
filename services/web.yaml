@@ -75,6 +75,6 @@ data:
   AUTH_TRUST_HOST: "true"
   AUTH_SECRET: ObjQQ/kxEEp8p2jwTZdfmHOxJFDJ5UxnBA7+d0FZl0E=
   AUTH_KEYCLOAK_ID: web
-  AUTH_KEYCLOAK_SECRET: EVeEQMfIvv40XWEaxYCxf0DogbOkuDAW
+  AUTH_KEYCLOAK_SECRET: cojNuGGL6kleGKqEUMci09XL8WFKz2ui
   AUTH_KEYCLOAK_ISSUER: https://authjs-idp.aimerzarashi.com/realms/demo
   QUERY_URL: "http://authjs-api:1323"
